@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Главная страница</title>
+    <link rel="stylesheet" href="styles.css">
+    <script type="text/javascript" src="/library/jsSip.js"></script>
+</head>
+<body>
+<main class="container">
+    <input class="input" type="text">
+    <button class="call">call</button>
+    <button class="stop">stop</button>
+    <header class="header">
+        <h2 class="title">SIP Account</h2>
+        <img class="settings" src="./icons/settings.png" alt="icon" height="30px"/>
+    </header>
+    <div class="main">
+        <div class="config">
+            <form class="form" name="config_form">
+                <input name="server" placeholder="SIP Server" class="input" type="text"/>
+                <input name="sip" placeholder="SIP Username" class="input" type="text"/>
+                <input name="password" placeholder="SIP Password" class="input " type="password"/>
+                <input name="port" placeholder="SIP Port" class="input" type="text"/>
+                <button type="submit" class="button">Connect</button>
+            </form>
+        </div>
+
+        <div class="contacts hidden">
+            <div class="contacts_header">
+                <input placeholder="Sip number" class="input input_header" type="text"/>
+                <img alt="icon" src="icons/forwarding_green.png" height="40px">
+            </div>
+
+            <ul class="contactList">
+                <li class="contactList_item">
+                    <span class="contactList_number">89944394339</span>
+                    <img alt="icon" src="icons/forwarding_green.png" height="40px">
+                </li>
+                <li class="contactList_item">
+                    <span class="contacts_list_number">89944394339</span>
+                    <img alt="icon" src="icons/forwarding_green.png" height="40px">
+                </li>
+                <li class="contactList_item">
+                    <span class="contacts_list_number">89944394339</span>
+                    <img alt="icon" src="icons/forwarding_green.png" height="40px">
+                </li>
+            </ul>
+        </div>
+        <div class="call hidden">
+            <img alt="icon" src="icons/user.png" height="150px" width="150px">
+            <span>17:07</span>
+            <div class="call_footer">
+                <img alt="icon" src="icons/forwarding_green.png" height="50px">
+                <img alt="icon" src="icons/forwarding_red.png" height="50px">
+            </div>
+        </div>
+    </div>
+</main>
+
+<script src="app.js"></script>
+<!--<script src="index.js"></script>-->
+</body>
+</html>
