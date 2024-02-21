@@ -3,12 +3,14 @@
   "name": "SoftPhone",
   "description": "Base Level Extension",
   "version": "1.0",
+  "minimum_chrome_version": "109",
   "action": {
     "default_popup": "index.html",
-    "default_icon": "icons/forwarding_red.png"
+    "default_icon": "icons/defaultIcon.png"
   },
   "background": {
-    "service_worker": "service-worker.js"
+    "service_worker": "service-worker.js",
+    "type": "module"
   },
   "permissions": [
     "storage",
@@ -21,20 +23,30 @@
   "host_permissions": [
     "https://www.developer.chrome.com/*"
   ],
-  "optional_host_permissions":[
+  "optional_host_permissions": [
     "https://*/*",
     "http://*/*"
   ],
   "web_accessible_resources": [
     {
-      "resources": ["requestPermissions.html", "requestPermissions.js"],
-      "matches": ["<all_urls>"]
+      "resources": [
+        "requestPermissions.html",
+        "requestPermissions.js",
+        "js/sip.js"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
     }
   ],
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
-      "js": ["content-script.js"]
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content-script.js"
+      ]
     }
   ]
 }

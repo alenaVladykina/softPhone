@@ -7,16 +7,16 @@
     <script type="text/javascript" src="/library/jsSip.js"></script>
 </head>
 <body>
-<main class="container">
-    <input class="input" type="text">
-    <button class="call">call</button>
-    <button class="stop">stop</button>
-    <header class="header">
-        <h2 class="title">SIP Account</h2>
-        <img class="settings" src="./icons/settings.png" alt="icon" height="30px"/>
-    </header>
+<main id="app" class="container">
+    <!--    <input class="input" type="text">-->
+    <!--    <button class="call">call</button>-->
+    <!--    <button class="stop">stop</button>-->
     <div class="main">
-        <div class="config">
+        <div class="config js-page hidden" data-name="config">
+            <header class="header">
+                <h2 class="title">SIP Account</h2>
+                <img class="settings" src="./icons/settings.png" alt="icon" height="30px"/>
+            </header>
             <form class="form" name="config_form">
                 <input name="server" placeholder="SIP Server" class="input" type="text"/>
                 <input name="sip" placeholder="SIP Username" class="input" type="text"/>
@@ -26,10 +26,18 @@
             </form>
         </div>
 
-        <div class="contacts hidden">
+        <div class="contacts js-page hidden" data-name="main">
+            <header class="header">
+                <h2 class="title">SIP Account</h2>
+                <img class="settings" src="./icons/settings.png" alt="icon" height="30px"/>
+            </header>
             <div class="contacts_header">
-                <input placeholder="Sip number" class="input input_header" type="text"/>
-                <img alt="icon" src="icons/forwarding_green.png" height="40px">
+                <form class="call_form">
+                    <input name="call" placeholder="Sip number" class="input input_header" type="text"/>
+                    <button class="button_call" type="submit">
+                        <img alt="icon" src="icons/forwarding_green.png" height="40px">
+                    </button>
+                </form>
             </div>
 
             <ul class="contactList">
@@ -47,7 +55,7 @@
                 </li>
             </ul>
         </div>
-        <div class="call hidden">
+        <div class="call js-page hidden" data-name="call">
             <img alt="icon" src="icons/user.png" height="150px" width="150px">
             <span>17:07</span>
             <div class="call_footer">
@@ -58,7 +66,7 @@
     </div>
 </main>
 
-<script src="app.js"></script>
+<script type="module" src="app.mjs"></script>
 <!--<script src="index.js"></script>-->
 </body>
 </html>
