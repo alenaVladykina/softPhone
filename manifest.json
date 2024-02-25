@@ -6,7 +6,7 @@
   "minimum_chrome_version": "109",
   "action": {
     "default_popup": "index.html",
-    "default_icon": "icons/defaultIcon.png"
+    "default_icon": "icons/app.png"
   },
   "background": {
     "service_worker": "service-worker.js",

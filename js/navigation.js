@@ -1,7 +1,6 @@
-export default class Navigation {
+export class Navigation {
     constructor(root) {
         this.pages = {};
-        this.activePage = '';
 
         for (let page of root.getElementsByClassName("js-page")) {
             const {name} = page.dataset;
@@ -17,6 +16,5 @@ export default class Navigation {
             const {name} = page.dataset;
             page.classList.toggle('hidden', name !== value);
         }
-        this.activePage = value;
     }
 }

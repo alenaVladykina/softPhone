@@ -1,17 +1,13 @@
-
 * {
     box-sizing: border-box;
 }
 
-body {
-    overflow: hidden;
+body, html {
     font-family: "Arial", sans-serif;
     width: 320px;
-    height: 500px;
     margin: 0 auto;
     padding: 0;
 }
-
 
 .header {
     height: 50px;
@@ -40,6 +36,60 @@ body {
     /*height: 500px;*/
     /*border: 2px solid #808080;*/
     /*overflow: hidden;*/
+}
+
+.contacts_header {
+    display: flex;
+    margin-bottom: 4px;
+}
+
+.contacts_settings {
+    background: url("icons/settings.svg") no-repeat center;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    border: none;
+    background-color: #eeeeee;
+    margin: 0 0 0 6px;
+    transition: background-color 0.3s;
+    cursor: pointer;
+}
+
+.contacts_settings:hover {
+    background-color: #dbdbdb;
+}
+
+.call-form {
+    position: relative;
+    flex-grow: 1;
+}
+
+.call-form_input {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 17px;
+    padding: 8px 40px 8px 12px;
+    outline: none;
+}
+.call-form_button {
+    background: url("icons/phone.svg") no-repeat;
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    width: 31px;
+    height: 31px;
+    background-color: #26ab23;
+    border: 0;
+    border-radius: 8px;
+    background-size: 60%;
+    background-position: center;
+    cursor: pointer;
+    transition: opacity 0.3s;
+}
+
+.call-form_button:hover {
+    opacity: 0.8;
 }
 
 .input {
@@ -78,15 +128,6 @@ body {
     height: 40px;
 }
 
-.main {
-    padding: 0 25px 20px 25px;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    margin-top: 30px;
-}
-
-
 .config_form {
     height: 100%;
     width: 100%;
@@ -98,8 +139,7 @@ body {
 }
 
 .contacts {
-    width: 100%;
-    display: block;
+    padding: 8px;
 }
 
 .call_form {
@@ -107,34 +147,150 @@ body {
     justify-content: space-between;
 }
 
-.contactList {
+.contact-list {
     list-style-type: none;
-    width: 100%;
     padding: 0;
+    margin: 0;
 }
 
-.contactList_item {
-    height: 40px;
-    width: 100%;
+.contact-list_call {
+    border: none;
+    background: #26ab23;
+    color: #fff;
+    border-radius: 4px;
+    padding: 5px 12px;
+    margin: 3px 0;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.contact-list_call:hover {
+    background-color: #3ac337;
+}
+
+.contact-list_item {
+    position: relative;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
+    justify-content: space-between;
+    border-bottom: 1px solid #f4f4f4;
+    padding: 8px 0;
 }
 
-.contactList_number {
-    font-size: 17px;
+.contact-list_item:last-child {
+    border: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
 }
 
+.contact-list_item:hover .contact-list_action {
+    opacity: 1;
+}
+
+.contact-list_item__header {
+    color: #6a6a6a;
+}
+
+.contact-list_status {
+    background: no-repeat center;
+    background-size: cover;
+    width: 16px;
+    height: 16px;
+}
+
+.contact-list_status.contact-list_status__made {
+    background-image: url(icons/call-made.svg);
+}
+
+.contact-list_status.contact-list_status__made.contact-list_status__fail {
+    background-image: url(icons/call-made-failed.svg);
+}
+
+.contact-list_status.contact-list_status__received {
+    background-image: url(icons/call-received.svg);
+}
+
+.contact-list_status.contact-list_status__received .contact-list_status__fail {
+    background-image: url(icons/call-received-failed.svg);
+}
+
+.contact-list_value__status {
+    width: 20px;
+}
+
+.contact-list_value__phone {
+    width: 80px;
+}
+
+.contact-list_value__date {
+    width: 120px;
+}
+
+.contact-list_value__duration {
+    width: 50px;
+    text-align: right;
+}
+
+.contact-list_action {
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
 
 .call {
     display: flex;
-    height: 100%;
-    width: 100%;
     justify-content: space-around;
     flex-direction: column;
     align-items: center;
     overflow: hidden;
+    background: #221f27;
+    color: #fff;
+    padding: 34px 0;
+}
+
+.call_user {
+    width: 150px;
+    height: 150px;
+    background: #fff url(icons/user.svg) center;
+    border-radius: 50%;
+    background-size: cover;
+}
+
+.call_phone {
+    font-size: 28px;
+    margin-top: 24px;
+}
+
+.call_button {
+    width: 46px;
+    height: 46px;
+    background: #fff;
+    background-position: center;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+}
+.call_button:hover {
+    opacity: 0.8;
+}
+
+.call_button__answer {
+    background-image: url(icons/answer.svg);
+}
+
+.call_button__hang-up {
+    background-image: url(icons/hang-up.svg);
+}
+
+.call_info {
+    padding: 4px 8px;
+    border-radius: 8px;
+    margin: 16px 0 40px
+}
+
+.call_info__timer {
+    background: #443b54;
 }
 
 .call_footer {
