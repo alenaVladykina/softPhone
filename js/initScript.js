@@ -1,7 +1,5 @@
 import {checkConfig} from "./sip.js";
 
-// import {createOffscreen} from "../service-worker.js"
-
 
 export function initNavigate(navigation) {
     chrome.storage.local.get("config").then(({config}) => {

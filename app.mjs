@@ -1,5 +1,5 @@
 import {Navigation} from "./js/navigation.js";
-import {start, initNavigate} from "./js/initScript.js";
+import {initNavigate} from "./js/initScript.js";
 
 
 function updateNavigation(navigation, status) {
@@ -11,6 +11,7 @@ function updateNavigation(navigation, status) {
             break;
         case 'init':
             initNavigate(navigation);
+            break;
         case 'ended':
         case 'failed':
             navigation.go('main');
@@ -194,21 +195,10 @@ document.addEventListener("DOMContentLoaded", init);
 
 async function initConfigPage(navigation) {
     const fields = document.querySelectorAll('.js-field');
-    const {config} = await chrome.storage.local.get("config");
-    if (config) {
+    const {config: getConfig} = await chrome.storage.local.get("config");
+    if (getConfig) {
         for (let field of fields) {
-            field.value = config[field.name];
-        }
-    }
-
-
-    function startCheck(value) {
-        if (config) {
-            chrome.storage.local.set({config: value});
-            config && navigation.go('main');
-        } else {
-            start(value);
-            chrome.storage.local.set({config: value});
+            field.value = getConfig[field.name];
         }
     }
 
@@ -228,11 +218,9 @@ async function initConfigPage(navigation) {
         const name = formData.get('name');
         const password = formData.get('password');
         const port = formData.get('port');
-        const configValue = {server, password, name, port};
-        startCheck(configValue)
-        // start(config);
-        // chrome.storage.local.set({config});
-        // config && navigation.go('main');
+        const config = {server, password, name, port};
+        chrome.storage.local.set({config});
+        navigation.go('main');
     });
 }
 

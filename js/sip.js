@@ -41,11 +41,14 @@ export function init({name, password, server, port}) {
         });
 
         currentSession.on('failed', (e) => {
+
             updateStatus('failed', {originator});
+            console.log(">>>>>>>>>>failed", e)
         });
 
         currentSession.on('ended', (e) => {
             updateStatus('ended', {originator});
+            console.log(">>>>>>>>>>ended")
         });
 
         currentSession.on('confirmed', () => {
@@ -53,12 +56,12 @@ export function init({name, password, server, port}) {
                 phone: currentSession.remote_identity.uri.user,
                 originator
             });
+            console.log('>>>>>>>>>>>>>>>>confirmed')
         });
     })
-
+    debugger;
     ua.start();
 }
-
 
 
 export function checkConfig({name, password, server, port} = {}) {
@@ -73,6 +76,7 @@ export function call(phone) {
 }
 
 function updateStatus(value, {originator, phone} = {}) {
+
     chrome.runtime.sendMessage({
         event: 'changeStatus',
         payload: {

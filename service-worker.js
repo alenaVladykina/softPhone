@@ -1,31 +1,19 @@
-//import {checkConfig} from "./js/sip.js";
+import {checkConfig} from "./js/sip.js";
 
-import {start} from "./js/initScript.js";
 
 chrome.storage.session.set({status: 'init'});
 chrome.action.setBadgeBackgroundColor({color: '#fff'});
 
-chrome.storage.local.get(["config"]).then(({config}) => {
-    start(config);
+chrome.storage.local.get(["config"]).then(async ({config}) => {
+    //start(config);
+    if (checkConfig(config)) {
+        await createOffscreen();
+        chrome.runtime.sendMessage({
+            event: 'init',
+            payload: {config}
+        })
+    }
 });
-
-// export async function init(config) {
-//
-//     debugger;
-//
-//     console.log("jjjjjjjjjjjjjjjjjjjjjjjjjjjjjj", config)
-//
-//     if (checkConfig(config)) {
-//         await createOffscreen();
-//
-//         chrome.runtime.sendMessage({
-//             event: 'init',
-//             payload: {config},
-//         });
-//     }
-// }
-
-
 
 chrome.runtime.onMessage.addListener(function ({event, payload}) {
     if (event === 'changeStatus') {
@@ -40,13 +28,24 @@ chrome.runtime.onMessage.addListener(function ({event, payload}) {
     }
 });
 
+export function createOffscreen() {
+    return chrome.offscreen.createDocument({
+        url: 'offscreen.html',
+        reasons: ['WEB_RTC'],
+        justification: 'for jsSip',
+    });
+}
+
 
 // Update history
-chrome.storage.onChanged.addListener(async ({date, status}, namespace) => {
+chrome.storage.onChanged.addListener(async (g, namespace) => {
     if (namespace !== "session") {
         return;
     }
 
+    const {date, status} = g
+
+    console.log('>>>>>>>status', g)
     const newStatus = status.newValue;
 
     if (newStatus === "incomingCall" || newStatus === "outgoingCall") {
