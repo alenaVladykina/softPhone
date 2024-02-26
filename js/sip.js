@@ -40,12 +40,10 @@ export function init({name, password, server, port}) {
         });
 
         currentSession.on('failed', (e) => {
-            console.log("AAS failed >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", originator, e,)
             updateStatus('failed', {originator});
         });
 
         currentSession.on('ended', (e) => {
-            console.log("AAS ended >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", originator, e)
             updateStatus('ended', {originator});
         });
 
@@ -61,7 +59,7 @@ export function init({name, password, server, port}) {
 }
 
 export function checkConfig({name, password, server, port} = {}) {
-    return Boolean(name && password && server && port); // TODO улучшить валидацию, например проверять на порт на число
+    return Boolean(name && password && server && port);
 }
 
 // Исходящий звонок

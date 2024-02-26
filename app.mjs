@@ -187,54 +187,6 @@ function init() {
 
 document.addEventListener("DOMContentLoaded", init);
 
-
-// ua.on("newRTCSession", function (data) {
-//     const session = data.session;
-//     const request = data.request;
-//     const originator = data.originator;
-//
-//     console.debug("New session created");
-//
-//     if (session.direction === "incoming") {
-//         // incoming call here
-//         session.on("accepted", function () {
-//             console.log('на звонок ответили')
-//             // the call has answered
-//         });
-//         session.on("confirmed", function () {
-//             // this handler will be called for incoming calls too
-//             console.log('входящий вызовов')
-//         });
-//         session.on("ended", function () {
-//             console.log('звонок завершился')
-//             // the call has ended
-//         });
-//         session.on("failed", function () {
-//             console.log('не могу установить звонок')
-//             // unable to establish the call
-//         });
-//         session.on('addstream', function (e) {
-//             // set remote audio stream (to listen to remote audio)
-//             // remoteAudio is <audio> element on page
-//             remoteAudio.src = window.URL.createObjectURL(e.stream);
-//             remoteAudio.play();
-//         });
-//
-//         var callOptions = {
-//             mediaConstraints: {
-//                 audio: true, // only audio calls
-//                 video: false
-//             }
-//         };
-//
-//         // Answer call
-//         session.answer(callOptions);
-//
-//         // Reject call (or hang up it)
-//         //session.terminate();
-//     }
-// });
-
 async function initConfigPage(navigation) {
     const fields = document.querySelectorAll('.js-field');
     const {config} = await chrome.storage.local.get("config")
@@ -242,6 +194,8 @@ async function initConfigPage(navigation) {
         const name = field.name;
         field.value = config[name]
     }
+
+    console.log(config)
 
     const configForm = document.querySelector('.form');
     configForm.addEventListener('submit', async (event) => {
@@ -253,10 +207,10 @@ async function initConfigPage(navigation) {
         }
 
         const formData = new FormData(configForm);
-        const server = formData.get('server');
-        const name = formData.get('name');
-        const password = formData.get('password');
-        const port = formData.get('port');
+        const server = formData.get('server').trim();
+        const name = formData.get('name').trim();
+        const password = formData.get('password').trim();
+        const port = formData.get('port').trim();
         const config = {server, password, name, port};
         chrome.storage.local.set({config});
         navigation.go('main');
