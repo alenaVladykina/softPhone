@@ -1,4 +1,6 @@
 import {Navigation} from "./js/navigation.js";
+import {start, initNavigate} from "./js/initScript.js";
+
 
 function updateNavigation(navigation, status) {
     switch (status) {
@@ -8,12 +10,14 @@ function updateNavigation(navigation, status) {
             navigation.go('call');
             break;
         case 'init':
+            initNavigate(navigation);
         case 'ended':
         case 'failed':
             navigation.go('main');
             break;
     }
 }
+
 
 function formatTime(time) {
     const timeInSeconds = Math.ceil(time / 1000);
@@ -187,33 +191,48 @@ function init() {
 
 document.addEventListener("DOMContentLoaded", init);
 
+
 async function initConfigPage(navigation) {
     const fields = document.querySelectorAll('.js-field');
-    const {config} = await chrome.storage.local.get("config")
-    for (let field of fields) {
-        const name = field.name;
-        field.value = config[name]
+    const {config} = await chrome.storage.local.get("config");
+    if (config) {
+        for (let field of fields) {
+            field.value = config[field.name];
+        }
     }
 
-    console.log(config)
+
+    function startCheck(value) {
+        if (config) {
+            chrome.storage.local.set({config: value});
+            config && navigation.go('main');
+        } else {
+            start(value);
+            chrome.storage.local.set({config: value});
+        }
+    }
 
     const configForm = document.querySelector('.form');
+
     configForm.addEventListener('submit', async (event) => {
         event.preventDefault();
 
         if (event.submitter.name === "back") {
             navigation.go('main');
-            return
+            return;
         }
 
+
         const formData = new FormData(configForm);
-        const server = formData.get('server').trim();
-        const name = formData.get('name').trim();
-        const password = formData.get('password').trim();
-        const port = formData.get('port').trim();
-        const config = {server, password, name, port};
-        chrome.storage.local.set({config});
-        navigation.go('main');
+        const server = formData.get('server');
+        const name = formData.get('name');
+        const password = formData.get('password');
+        const port = formData.get('port');
+        const configValue = {server, password, name, port};
+        startCheck(configValue)
+        // start(config);
+        // chrome.storage.local.set({config});
+        // config && navigation.go('main');
     });
 }
 

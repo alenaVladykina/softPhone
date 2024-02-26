@@ -1,12 +1,13 @@
 let ua = null;
 let currentSession = null;
 
+
 export function init({name, password, server, port}) {
     if (ua !== null) {
         return;
     }
 
-    //JsSIP.debug.enable('JsSIP:*');
+    JsSIP.debug.enable('JsSIP:*');
     const socket = new JsSIP.WebSocketInterface(`wss://${server}`);
 
     // Настройка сокетов
@@ -57,6 +58,8 @@ export function init({name, password, server, port}) {
 
     ua.start();
 }
+
+
 
 export function checkConfig({name, password, server, port} = {}) {
     return Boolean(name && password && server && port);
