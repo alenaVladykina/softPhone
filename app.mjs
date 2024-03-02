@@ -81,25 +81,65 @@ function init() {
         chrome.runtime.sendMessage({event: 'answer'});
     });
 
-    chrome.storage.session.get('status').then(({status}) => {
-        updateNavigation(navigation, status);
+    chrome.storage.session.get(['status', 'connectionStatus']).then(({status, connectionStatus}) => {
+        if (connectionStatus) {
+            updateConnectionStatus(connectionStatus);
+        }
+
+        if (status) {
+            updateNavigation(navigation, status);
+            renderCall(status);
+        }
     });
 
 
     chrome.storage.onChanged.addListener((changes, namespace) => {
-        const {status, history} = changes;
+        const {status, history, connectionStatus} = changes;
+        if (connectionStatus) {
+            updateConnectionStatus(connectionStatus.newValue);
+        }
 
-        status && renderCall(status.newValue);
+        if (status) {
+            renderCall(status.newValue);
+            updateNavigation(navigation, status.newValue);
+        }
+
         history && renderHistory(history.newValue);
     });
 
     initConfigPage(navigation);
 
+    function updateConnectionStatus(connectionStatus) {
+        const elmConnectionStatusValue = document.querySelector('.js-connection-status-value');
+
+        elmConnectionStatusValue.innerHTML = connectionStatus;
+
+        const isRegistered = connectionStatus === 'registered';
+        document.querySelector('.js-call').disabled = !isRegistered;
+        historyList.classList.toggle('contact-list__disabled', !isRegistered);
+    }
+
     const historyList = document.querySelector('.js-history');
 
-    chrome.storage.local.get(['status', 'history']).then(({status, history}) => {
+    historyList.addEventListener("click",async (event) => {
+        const phone = event.target?.dataset?.phone;
+
+        if (phone && !historyList.classList.contains('contact-list__disabled')) {
+            const {config} = await chrome.storage.local.get("config");
+            const {port, server} = config;
+            const portSeparator = port ? ':' : '';
+
+            chrome.runtime.sendMessage({
+                event: 'call',
+                payload: {
+                    phone: `${phone}@${server}${portSeparator}${port}`
+                }
+            });
+        }
+    })
+
+    chrome.storage.local.get('history').then(({history}) => {
         renderHistory(history);
-        renderCall(status);
     });
 
     function renderHistory(history) {
@@ -148,23 +188,6 @@ function init() {
         });
 
         historyList.innerHTML = items;
-
-        historyList.addEventListener("click", async (event) => {
-            const phone = event.target?.dataset?.phone;
-
-            if (phone) {
-                const {config} = await chrome.storage.local.get("config");
-                const {port, server} = config;
-                const portSeparator = port ? ':' : '';
-
-                chrome.runtime.sendMessage({
-                    event: 'call',
-                    payload: {
-                        phone: `${phone}@${server}${portSeparator}${port}`
-                    }
-                });
-            }
-        })
     }
 
     async function renderCall(status) {
@@ -185,8 +208,6 @@ function init() {
         elmStatus.classList.toggle('hidden', isConfirmed);
         timer.classList.toggle('hidden', !isConfirmed);
         answerButton.classList.toggle('hidden', !isIncomingCall);
-
-        updateNavigation(navigation, status);
     }
 }
 

@@ -2,9 +2,16 @@ let ua = null;
 let currentSession = null;
 
 
-export function init({name, password, server, port}) {
+function stop() {
+    return new Promise((resolve) => {
+        ua.on('disconnected', () => resolve());
+        ua.stop();
+    });
+}
+
+export async function init({name, password, server, port}) {
     if (ua !== null) {
-        return;
+        await stop();
     }
 
     JsSIP.debug.enable('JsSIP:*');
@@ -23,32 +30,58 @@ export function init({name, password, server, port}) {
     const remoteAudio = new window.Audio();
     remoteAudio.autoplay = true;
 
+    ua.on('connected', () => {
+        updateState({
+            isConnected: true,
+            connectionStatus: 'connected'
+        });
+    });
+    ua.on('disconnected', () => {
+        updateState({
+            isConnected: false,
+            connectionStatus: 'disconnected'
+        });
+    });
+    ua.on('registered', function(e) {
+        updateState({
+            isRegistered: true,
+            connectionStatus: 'registered'
+        });
+    });
+    ua.on('unregistered', function(e) {
+        updateState({
+            isRegistered: false,
+            connectionStatus: 'unregistered'
+        });
+    });
+    ua.on('registrationFailed', function(e) {
+        updateState({
+            isRegistered: false,
+            connectionStatus: 'registrationFailed'
+        });
+    });
+
     ua.on("newRTCSession", function (data) {
-        const {session, request, originator} = data;
+        const {session, originator} = data;
         currentSession = session;
+
+        currentSession.on("accepted",function(){
+            remoteAudio.srcObject = currentSession.connection.getRemoteStreams()[0];
+        });
 
         currentSession.on('progress', () => {
             const phone = currentSession.remote_identity.uri.user;
+            const type = originator === 'remote' ? 'incomingCall' : 'outgoingCall';
 
-            if (originator === 'remote') {
-                updateStatus('incomingCall', {originator, phone});
-            } else {
-                updateStatus('outgoingCall', {originator, phone});
-                currentSession.connection.ontrack = function (e) {
-                    remoteAudio.srcObject = e.streams[0];
-                };
-            }
+            updateStatus(type, {originator, phone});
         });
 
-        currentSession.on('failed', (e) => {
-
+        currentSession.on('failed', () => {
             updateStatus('failed', {originator});
-            console.log(">>>>>>>>>>failed", e)
         });
 
-        currentSession.on('ended', (e) => {
+        currentSession.on('ended', () => {
             updateStatus('ended', {originator});
-            console.log(">>>>>>>>>>ended")
         });
 
         currentSession.on('confirmed', () => {
@@ -56,10 +89,9 @@ export function init({name, password, server, port}) {
                 phone: currentSession.remote_identity.uri.user,
                 originator
             });
-            console.log('>>>>>>>>>>>>>>>>confirmed')
         });
-    })
-    debugger;
+    });
+
     ua.start();
 }
 
@@ -75,8 +107,16 @@ export function call(phone) {
     });
 }
 
-function updateStatus(value, {originator, phone} = {}) {
+function updateState(payload) {
+    console.log("updateState", payload)
 
+    chrome.runtime.sendMessage({
+        event: 'changeState',
+        payload
+    });
+}
+
+function updateStatus(value, {originator, phone} = {}) {
     chrome.runtime.sendMessage({
         event: 'changeStatus',
         payload: {
@@ -96,5 +136,7 @@ export function answer() {
 
 // Отбой звонка
 export function hangUp() {
-    currentSession.terminate();
+    if (!currentSession.isEnded()) {
+        currentSession.terminate();
+    }
 }

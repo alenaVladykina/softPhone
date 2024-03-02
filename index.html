@@ -29,21 +29,26 @@
             <div class="contacts_header">
                 <form class="call-form">
                     <input name="call" placeholder="Sip number" class="call-form_input" type="text" autofocus/>
-                    <button class="call-form_button" type="submit"></button>
+                    <button class="call-form_button js-call" type="submit"></button>
                 </form>
                 <button class="contacts_settings"></button>
+            </div>
+            <div class="info-block js-connection-status">
+                <spam class="info-block_label">status:</spam>
+                <span class="info-block_text js-connection-status-value"></span>
             </div>
 
             <ul class="contact-list js-history"></ul>
         </div>
+
         <div class="call js-page hidden" data-name="call">
             <div class="call_user"></div>
             <span class="call_phone js-phone"></span>
             <span class="call_info call_info__timer js-timer"></span>
             <span class="call_info js-status"></span>
             <div class="call_footer">
-                <button height="50px" class="call_button call_button__answer js-answer"></button>
-                <button height="50px" class="call_button call_button__hang-up js-hang-up"></button>
+                <button class="call_button call_button__answer js-answer"></button>
+                <button class="call_button call_button__hang-up js-hang-up"></button>
             </div>
         </div>
     </div>
