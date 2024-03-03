@@ -76,11 +76,14 @@ export async function init({name, password, server, port}) {
             updateStatus(type, {originator, phone});
         });
 
-        currentSession.on('failed', () => {
+        currentSession.on('failed', (e) => {
+            console.log('>>>>>>>>>>>>>>>>>>>>>>>  failed', e)
+
             updateStatus('failed', {originator});
         });
 
-        currentSession.on('ended', () => {
+        currentSession.on('ended', (e) => {
+            console.log('>>>>>>>>>>>>>>>>>>>>>>>  ended', e)
             updateStatus('ended', {originator});
         });
 
@@ -139,4 +142,12 @@ export function hangUp() {
     if (!currentSession.isEnded()) {
         currentSession.terminate();
     }
+}
+
+export function mute() {
+    currentSession.mute();
+}
+
+export function unmute() {
+    currentSession.unmute();
 }

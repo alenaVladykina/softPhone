@@ -11,7 +11,7 @@
     <div class="main">
         <div class="config js-page hidden" data-name="config">
             <header class="header">
-                <h2 class="title">SIP Account</h2>
+                <span class="title">Settings</span>
             </header>
             <form class="form" name="config_form">
                 <input name="server" placeholder="SIP Server" class="input js-field" type="text"/>
@@ -19,8 +19,8 @@
                 <input name="password" placeholder="SIP Password" class="input js-field"/>
                 <input name="port" placeholder="SIP Port" class="input js-field" type="text"/>
                 <div class="button_wrapper">
-                    <button type="submit" name="save" class="button">Save</button>
                     <button type="submit" name="back" class="button js-back">Back</button>
+                    <button type="submit" name="save" class="button button__accent">Save</button>
                 </div>
             </form>
         </div>
@@ -47,6 +47,7 @@
             <span class="call_info call_info__timer js-timer"></span>
             <span class="call_info js-status"></span>
             <div class="call_footer">
+                <button class="call_button call_button__mute js-mute"></button>
                 <button class="call_button call_button__answer js-answer"></button>
                 <button class="call_button call_button__hang-up js-hang-up"></button>
             </div>

@@ -10,16 +10,15 @@ body, html {
 }
 
 .header {
-    height: 50px;
-    width: 100%;
-    background-color: #334fba;
-    color: #fff;
-    padding: 15px 25px 15px 25px;
+    padding: 14px 16px;
     font-size: 20px;
     font-weight: 300;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    color: #000;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 16px;
 }
 
 
@@ -56,6 +55,10 @@ body, html {
 
 .contacts_settings:hover {
     background-color: #dbdbdb;
+}
+
+.form {
+    padding: 0 8px;
 }
 
 .call-form {
@@ -103,12 +106,12 @@ body, html {
 .input {
     font-size: 17px;
     height: 40px;
-    padding: 10px;
     width: 100%;
-    border-radius: 7px;
-    border: 1px solid #808080;
     outline: none;
-    margin-bottom: 30px;
+    margin-bottom: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 8px 12px;
 }
 
 .input_header {
@@ -117,14 +120,25 @@ body, html {
 
 .button {
     padding: 8px 20px;
-    color: #fff;
+    color: #000;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #334fba;
+    background-color: #eaeaea;
     font-size: 17px;
     border: none;
-    border-radius: 10px;
+    border-radius: 8px;
+    transition: opacity 0.3s;
+    cursor: pointer;
+}
+
+.button:hover {
+    opacity: 0.8;
+}
+
+.button__accent {
+    background-color: #26ab23;
+    color: #fff;
 }
 
 .button_call {
@@ -137,13 +151,11 @@ body, html {
 }
 
 .config_form {
-    height: 100%;
-    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     column-gap: 30px;
-    color: #808080;
+    padding: 0 12px;
 }
 
 .contacts {
@@ -174,8 +186,9 @@ body, html {
 
 .button_wrapper {
     display: flex;
-    justify-content: space-around;
-    margin-bottom: 30px;
+    justify-content: flex-end;
+    margin: 16px 0 16px;
+    gap: 16px;
 }
 
 .contact-list_call:hover {
@@ -296,6 +309,20 @@ body, html {
 
 .call_button__hang-up {
     background-image: url(icons/hang-up.svg);
+}
+
+.call_button__mute,
+.call_button__unmute {
+    background-repeat: no-repeat;
+    background-size: 45%;
+}
+
+.call_button__mute {
+    background-image: url(icons/mic-mute-fill.svg);
+}
+
+.call_button__unmute {
+    background-image: url(icons/mic-fill.svg);
 }
 
 .call_info {

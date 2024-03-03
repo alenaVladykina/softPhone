@@ -1,4 +1,4 @@
-import {init, call, hangUp, answer} from "./js/sip.js";
+import {init, call, hangUp, answer, mute, unmute} from "./js/sip.js";
 
 
 chrome.runtime.onMessage.addListener(function ({event, payload}) {
@@ -14,6 +14,12 @@ chrome.runtime.onMessage.addListener(function ({event, payload}) {
             break;
         case "answer":
             answer();
+            break;
+        case "mute":
+            mute();
+            break;
+        case "unmute":
+            unmute();
             break;
     }
 });

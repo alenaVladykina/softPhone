@@ -53,13 +53,6 @@ async function timerTik(element) {
 }
 
 function init() {
-    const iframe = document.createElement("iframe");
-    iframe.setAttribute("hidden", "hidden");
-    iframe.setAttribute("id", "permissionsIFrame");
-    iframe.setAttribute("allow", "microphone");
-    iframe.src = chrome.runtime.getURL("requestPermissions.html");
-    document.body.appendChild(iframe);
-
     // Init navigation
     const navigation = new Navigation(document.getElementById('app'));
     const timer = document.querySelector('.js-timer');
@@ -75,6 +68,18 @@ function init() {
     hangUpButton.addEventListener('click', () => {
         chrome.runtime.sendMessage({event: 'hangUp'});
     });
+
+    const muteButton = document.querySelector('.js-mute');
+    muteButton.addEventListener('click', (event) => {
+        const isMute = event.target.classList.contains('call_button__mute');
+        mute(isMute);
+    });
+
+    function mute(isMute) {
+        muteButton.classList.toggle('call_button__mute', !isMute);
+        muteButton.classList.toggle('call_button__unmute', isMute);
+        chrome.runtime.sendMessage({event: isMute ? 'mute' : 'unmute'});
+    }
 
     const answerButton = document.querySelector('.js-answer');
     answerButton.addEventListener('click', () => {
@@ -198,6 +203,8 @@ function init() {
             timerTik(timer);
         }
 
+        mute(false);
+
         elmStatus.innerHTML = isIncomingCall
             ? 'Incoming call...'
             : 'Outgoing call...';
@@ -208,6 +215,7 @@ function init() {
         elmStatus.classList.toggle('hidden', isConfirmed);
         timer.classList.toggle('hidden', !isConfirmed);
         answerButton.classList.toggle('hidden', !isIncomingCall);
+        muteButton.classList.toggle('hidden', !isConfirmed);
     }
 }
 
